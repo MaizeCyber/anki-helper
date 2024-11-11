@@ -9,7 +9,8 @@ client = OpenAI(api_key=api_key)
 
 def generate(system_prompt: str, user_prompt: str) -> str:
     completion = client.chat.completions.create(
-        model="gpt-4-1106-preview",
+        #modified model to gpt-3.5-turbo-0125
+        model="gpt-3.5-turbo-0125",
         response_format={"type": "json_object"},
         messages=[
             {"role": "system", "content": system_prompt},

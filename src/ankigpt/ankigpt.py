@@ -91,6 +91,7 @@ You:
 """
 
 def generate_note(query: str) -> dict:
+    print("Generating note...")
     system_prompt = "".join(
         [
             ANKIHELPER_INSTRUCTION,
