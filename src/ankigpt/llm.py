@@ -9,7 +9,7 @@ import string
 
 JSON_INSTRUCTION = "You are a system that only outputs JSON."
 
-OPENAI_KEY = os.getenv("OPENAI_API_KEY")
+api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=api_key)
 
 def generate(system_prompt: str, user_prompt: str) -> str:
