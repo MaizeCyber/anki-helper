@@ -41,6 +41,7 @@ async def add(ctx):
         note_json = json.dumps(note_json, indent=2, ensure_ascii=False)
         message = f"{confirmation}\n```json\n{note_json}```"
         await ctx.send(message)
+
     except Exception as e:
         await ctx.send(f"Uh oh, something went wrong: `"+str(e)+"`")
 

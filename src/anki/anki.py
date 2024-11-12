@@ -32,6 +32,15 @@ def delete_decks(decks: list[str], cardsToo: bool = True) -> dict:
 
 def add_note(json: dict) -> dict:
     params = {"note": json}
+    print("Adding note to Anki...")
     response = ankiconnect.invoke(action="addNote",**params)
+    data = response["result"]
+    return data
+
+# use the storeMediaFile action to add media files to Anki
+def store_media_file(filename: str, data: str) -> dict:
+    params = {"filename": filename, "data": data}
+    print(f"Adding media file {filename} to Anki...")
+    response = ankiconnect.invoke(action="storeMediaFile",**params)
     data = response["result"]
     return data

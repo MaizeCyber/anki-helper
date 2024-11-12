@@ -104,5 +104,11 @@ def generate_note(query: str) -> dict:
         query,
         EXAMPLES_HSK
     )
-    return note_json
+    with_speech_note_json = add_audio_to_note_json(note_json, llm.generate_sound(query))
+    print("with_speech_note_json: ", with_speech_note_json)
+    return with_speech_note_json
 
+# function to add string of mp3 filename to "SentenceAudio" field of note_json in the format     "SentenceAudio": "[sound:audiofile.mp3]"
+def add_audio_to_note_json(note_json: dict, audio_filename: str) -> dict:
+    note_json["fields"]["SentenceAudio"] = f"[sound:{audio_filename}]"
+    return note_json

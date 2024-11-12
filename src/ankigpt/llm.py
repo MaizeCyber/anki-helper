@@ -1,10 +1,15 @@
 import os
 import json
 from openai import OpenAI
+from pathlib import Path
+import hashlib
+import random
+import string
+
 
 JSON_INSTRUCTION = "You are a system that only outputs JSON."
 
-api_key = os.getenv("OPENAI_API_KEY")
+OPENAI_KEY = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=api_key)
 
 def generate(system_prompt: str, user_prompt: str) -> str:
@@ -19,6 +24,21 @@ def generate(system_prompt: str, user_prompt: str) -> str:
     )
     return completion.choices[0].message.content
 
+#generates a sound by calling the OpenAI API
+def generate_sound(text: str) -> str:
+    unique_filename = add_hash_suffix_to_file_stem("speech.mp3")
+    print(f"Generating sound file: {unique_filename}")
+    speech_file_path = Path(__file__).parent / unique_filename
+    print(f"speech_file_path: {speech_file_path}")
+    response = client.audio.speech.create(
+        model="tts-1",
+        voice="alloy",
+        input=text
+    )
+    # Save audio data to the file
+    response.stream_to_file(speech_file_path)
+    return unique_filename
+
 def generate_json(
         system_prompt: str,
         user_prompt: str,
@@ -26,3 +46,13 @@ def generate_json(
     json_prompt = JSON_INSTRUCTION + system_prompt + examples
     generated_json: str = generate(json_prompt, user_prompt)
     return json.loads(generated_json)
+
+#randon file name generator for sound file
+def add_hash_suffix_to_file_stem(fname: str) -> str:
+    # Generate a random 20-byte hash
+    hash_value = hashlib.sha1(''.join(random.choices(string.ascii_letters + string.digits, k=20)).encode()).hexdigest()
+    max_len = 255 - len(hash_value) - 1  # Adjust for filename max length
+
+    # Separate filename stem and extension
+    stem, ext = Path(fname).stem[:max_len], Path(fname).suffix
+    return f"{stem}-{hash_value}{ext}"
