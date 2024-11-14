@@ -2,6 +2,7 @@ import os
 import json
 from openai import OpenAI
 from pathlib import Path
+from gtts import gTTS
 import hashlib
 import random
 import string
@@ -25,18 +26,19 @@ def generate(system_prompt: str, user_prompt: str) -> str:
     return completion.choices[0].message.content
 
 #generates a sound by calling the OpenAI API
-def generate_sound(text: str) -> str:
+def generate_sound(text: str, deckname: str) -> str:
     unique_filename = add_hash_suffix_to_file_stem("speech.mp3")
     print(f"Generating sound file: {unique_filename}")
     speech_file_path = Path(__file__).parent / unique_filename
     print(f"speech_file_path: {speech_file_path}")
-    response = client.audio.speech.create(
-        model="tts-1",
-        voice="onyx",
-        input=text
-    )
-    # Save audio data to the file
-    response.stream_to_file(speech_file_path)
+    if deckname == "chinese":
+        language = "zh-CN"
+    elif deckname == "spanish":
+        language = "es"
+    elif deckname == "japanese":
+        language = "ja"
+    response = gTTS(text=text, lang=language)
+    response.save(speech_file_path)
     return unique_filename
 
 def generate_json(

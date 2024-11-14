@@ -34,7 +34,7 @@ def generate_note(query: str, deckname: str) -> dict:
         promptInstruction
     )
 
-    with_speech_note_json = add_audio_to_note_json(note_json, llm.generate_sound(query))
+    with_speech_note_json = add_audio_to_note_json(note_json, llm.generate_sound(query, deckname))
     print("with_speech_note_json: ", with_speech_note_json)
     return with_speech_note_json
 
