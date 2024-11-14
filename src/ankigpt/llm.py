@@ -32,7 +32,7 @@ def generate_sound(text: str) -> str:
     print(f"speech_file_path: {speech_file_path}")
     response = client.audio.speech.create(
         model="tts-1",
-        voice="alloy",
+        voice="onyx",
         input=text
     )
     # Save audio data to the file

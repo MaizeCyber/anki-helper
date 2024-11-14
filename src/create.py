@@ -7,11 +7,11 @@ from pathlib import Path
 deck_name = config.default_deckname
 model_name = config.default_modelname
 
-def generate_and_add_card(query: str):
-    note_json: dict = ankigpt.generate_note(query)
+def generate_and_add_card(query: str, deckname: str):
+    note_json: dict = ankigpt.generate_note(query, deckname)
     note_id: int = anki.add_note(note_json)
     print("add note successful")
-    sound_filename = Path(__file__).parent / "ankigpt" / note_json["fields"]["SentenceAudio"].replace("[sound:", "").replace("]", "")
+    sound_filename = Path(__file__).parent / "ankigpt" / note_json["fields"]["Audio"].replace("[sound:", "").replace("]", "")
     # Base64 encode the audio file
     base64_audio = encode_audio_file(sound_filename)
     print(f"Adding audio file {sound_filename.name} to Anki...")

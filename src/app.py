@@ -22,17 +22,21 @@ intents.messages = True  # Enable message intents
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 @bot.command(name="add")
-async def add(ctx):
+async def add(ctx, arg1, arg2):
+    #check number of arguments
+    if len(arg1) == 0 or len(arg2) == 0:
+        await ctx.send("Please provide a query and a deck name, separated by a space. Use quotes for phrases.")
+        return
+    query = arg1
+    deckname = arg2
     # Remove the command prefix and the command name from the message to get the raw arguments
-    query = ctx.message.content[len(ctx.prefix) + len(ctx.invoked_with) + 1:]
-
     try: 
-        await ctx.send(f"Creating an example with query `{query}` . . .")
-        note_json, note_id  = create.generate_and_add_card(query)
+        await ctx.send(f"Creating an example with query `{query}` in deck '{deckname}'. . .")
+        note_json, note_id = create.generate_and_add_card(query, deckname)
         confirmation = "".join(
             [
                 "Done! Added **",
-                note_json["fields"]["Simplified"],
+                note_json["fields"]["Key"],
                 "** to deck **",
                 note_json["deckName"],
                 "**."
@@ -44,5 +48,6 @@ async def add(ctx):
 
     except Exception as e:
         await ctx.send(f"Uh oh, something went wrong: `"+str(e)+"`")
+        print(f'Error: {e}')
 
 bot.run(config.DISCORD_KEY)
