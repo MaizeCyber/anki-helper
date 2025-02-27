@@ -31,8 +31,12 @@ def generate_sound(text: str, deckname: str) -> str:
     print(f"Generating sound file: {unique_filename}")
     speech_file_path = Path(__file__).parent / unique_filename
     print(f"speech_file_path: {speech_file_path}")
-    language = "es"
-
+    if deckname == "chinese":
+        language = "zh-CN"
+    elif deckname == "spanish":
+        language = "es"
+    elif deckname == "japanese":
+        language = "ja"
     response = gTTS(text=text, lang=language)
     response.save(speech_file_path)
     return unique_filename

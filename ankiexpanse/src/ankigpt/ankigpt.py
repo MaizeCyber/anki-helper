@@ -10,64 +10,14 @@ Example Usage:
 from . import llm
 from . import prompts
 
-promptInstruction = f"""
-Examples:
-
-User:
-sencillo
-
-You:
-{{
-    "deckName": spanish,
-    "modelName": romantic,
-    "tags": ["AI-Generated"],
-    "fields": {{
-        "Key": "sencillo",
-        "Meaning": "simple",
-        "Part of speech": "adjective",
-        "Audio": "",
-        "Homophone": "",
-        "Homograph": "",
-        "Sentence": "El diseño de mi casa es muy sencillo.",
-        "SentenceCloze": "El diseño de mi casa es muy [ ].",
-        "SentenceMeaning": "The design of my house is very simple.",
-        "SentenceAudio": "",
-        "SentenceImage": "",
-    }}
-}}
-
-User:
-pelear
-
-You:
-{{
-    "deckName": spanish,
-    "modelName": romantic,
-    "tags": ["AI-Generated"],
-    "fields": {{
-        "Key": "pelear",
-        "Meaning": "to fight",
-        "Part of speech": "verb",
-        "Gender": "",
-        "Plural": "",
-        "Conjugation": "",
-        "Tense": "",
-        "Audio": "",
-        "Homophone": "",
-        "Homograph": "",
-        "Sentence": "Los hermanos comenzaron a pelear por el último pedazo de pizza.",
-        "SentenceCloze": "Los hermanos comenzaron a [ ] por el último pedazo de pizza.",
-        "SentenceMeaning": "The brothers started fighting over the last slice of pizza.",
-        "SentenceAudio": "",
-        "SentenceImage": "",
-    }}
-}}
-"""
-
-deckname = "spanish"
-
 def generate_note(query: str, deckname: str) -> dict:
     print("Generating note...")
+    if deckname == "chinese":
+        promptInstruction = prompts.EXAMPLES_HSK
+    elif deckname == "spanish":
+        promptInstruction = prompts.EXAMPLES_ROMANTIC
+    elif deckname == "japanese":
+        promptInstruction = prompts.EXAMPLES_JAPONIC
 
     system_prompt = "".join(
         [
