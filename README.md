@@ -59,7 +59,7 @@ install https://ankiweb.net/shared/info/2055492159
 install https://ankiweb.net/shared/info/501542723
 
 This is inherently super insecure. You should consider adding firewall rules to your server to whitelist your own IP address to access the droplet.
-
+```
 To                         Action      From
 --                         ------      ----
 22/tcp                     ALLOW IN    Anywhere                  
@@ -72,3 +72,4 @@ Anywhere (v6) on docker0   ALLOW IN    Anywhere (v6)
 80/tcp                     ALLOW OUT   Anywhere                  
 443 (v6)                   ALLOW OUT   Anywhere (v6)             
 80/tcp (v6)                ALLOW OUT   Anywhere (v6) 
+```
