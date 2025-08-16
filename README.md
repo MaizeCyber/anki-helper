@@ -34,10 +34,12 @@ Access via ssh
 ### Download and Configure Docker
 
 Download docker via these instructions https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04
+```
 docker login
 docker pull maizecyber/ankidesktop:new
 docker pull maizecyber/ankibot:v1.1
-
+```
+```
 docker run -d \
   --add-host=host.docker.internal:host-gateway \
   -p 3000:3000 \
@@ -45,15 +47,18 @@ docker run -d \
   -v ~/.local/share/Anki2:/config/app/Anki2 \
   -v ~/backups:/config/app/backups \
   maizecyber/ankidesktop:new
-
-
+```
+```
 docker run -d \
     --add-host=host.docker.internal:host-gateway \
     -e OPENAI_API_KEY=<key> \
     -e DISCORD_BOT_TOKEN=<key> \
     maizecyber/ankibot:v1.1
-
-visit http://157.245.243.4:3000/
+```
+visit 
+```
+http://<ip of droplet>:3000/
+```
 
 install https://ankiweb.net/shared/info/2055492159
 install https://ankiweb.net/shared/info/501542723
