@@ -55,7 +55,9 @@ docker run -d \
     -e DISCORD_BOT_TOKEN=<key> \
     maizecyber/ankibot:v1.1
 ```
-visit 
+I recommend adding this commands to "crontab -e" once you make sure the application is functioning so you can restart the droplet without having the manually SSH in.
+
+Next, visit 
 ```
 http://<ip of droplet>:3000/
 ```
@@ -63,18 +65,19 @@ http://<ip of droplet>:3000/
 install https://ankiweb.net/shared/info/2055492159
 install https://ankiweb.net/shared/info/501542723
 
-This is inherently super insecure. You should consider adding firewall rules to your server to whitelist your own IP address to access the droplet.
-```
-To                         Action      From
---                         ------      ----
-22/tcp                     ALLOW IN    Anywhere                  
-Anywhere                   ALLOW IN    <your ip>          
-Anywhere on docker0        ALLOW IN    Anywhere                  
-22/tcp (v6)                ALLOW IN    Anywhere (v6)             
-Anywhere (v6) on docker0   ALLOW IN    Anywhere (v6)             
 
-443                        ALLOW OUT   Anywhere                  
-80/tcp                     ALLOW OUT   Anywhere                  
-443 (v6)                   ALLOW OUT   Anywhere (v6)             
-80/tcp (v6)                ALLOW OUT   Anywhere (v6) 
+
+This is inherently super insecure. You should consider adding firewall rules to the Digital Ocean droplet:
+Outbound:
 ```
+Protocol	Port Range	Destination
+All TCP	All	All IPv4 / All IPv6
+All UDP	All	All IPv4 / All IPv6
+All ICMP	All	All IPv4 / All IPv6
+```
+Inbound:
+```
+All ICMP	All	All IPv4 / All IPv6
+```
+
+Create a snapshot of the droplet.
