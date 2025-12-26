@@ -14,16 +14,9 @@ Interfaceable through a Discord bot, the Anki Helper is currently available for 
 
 Once the assistant is [set up](#setup), the bot can be added to the Discord server and used by all members. 
 
-Add cards with `!add` command
+Add cards with `!add` command followed by the deck/language (spanish, japanese, chinese supported). Deck names must be the same as the language name.
 ```
-!add 苹果
-```
-Experimental
-```
-!add 跑步 in deck sports
-```
-```
-!add 仔细 with example 他好仔细地学习
+!add 苹果 chinese
 ```
 
 ## Setup
@@ -32,45 +25,59 @@ Experimental
 1. Register [OpenAI API Account and Key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-api-key)
 2. Register [Discord App and Bot Token](https://discord.com/developers/applications)
 
-### Programs
-1. Install [Python](https://www.python.org/downloads/)
-2. Install [Anki](https://apps.ankiweb.net/)
-3. Install [AnkiConnect add-on](https://ankiweb.net/shared/info/2055492159)
-4. Clone this repo
+### Create a Digital Ocean droplet
 
-### Environment
-1. Install Python packages: `pip install requirements.txt`
-2. Add Tokens and Keys to environment variables. Make sure the variable names match those in `src/config.py`
+Create Digital Ocean Droplet with 1 gb memory, 25 gb disk, 1 cpu
+Create SSH keys
+Access via ssh
 
-### Hosting the App
-1. Start Anki with the Anki-Connect add-on
-2. Run Anki-Helper: `python3 src/app.py`
+### Download and Configure Docker
 
-### Using the Discord Bot
-1. Add bot to server with [generated URL](https://discord.com/developers/docs/getting-started#step-1-creating-an-app).
-2. Start using commands in the server! 
-    - try: `!add 加油`!
+Download docker via these instructions https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04
+```
+docker login
+docker pull maizecyber/ankidesktop:new
+docker pull maizecyber/ankibot:v1.1
+```
+```
+docker run -d \
+  --add-host=host.docker.internal:host-gateway \
+  -p 3000:3000 \
+  -p 8765:8765 \
+  -v ~/.local/share/Anki2:/config/app/Anki2 \
+  -v ~/backups:/config/app/backups \
+  maizecyber/ankidesktop:new
+```
+```
+docker run -d \
+    --add-host=host.docker.internal:host-gateway \
+    -e OPENAI_API_KEY=<key> \
+    -e DISCORD_BOT_TOKEN=<key> \
+    maizecyber/ankibot:v1.1
+```
+I recommend adding this commands to "crontab -e" once you make sure the application is functioning so you can restart the droplet without having the manually SSH in.
 
-## Development
-More info on the [development page](development.md).
-### Setup
-1. Install packages: `pip install requirements.txt`
-2. Install dev packages: `pip install dev-requirements.txt`
+Next, visit 
+```
+http://<ip of droplet>:3000/
+```
 
-### Testing
-- Run all tests: `pytest -v`
-- Run specific test: `pytest tests\test_name.py -v`
+install https://ankiweb.net/shared/info/2055492159
+install https://ankiweb.net/shared/info/501542723
 
-### Roadmap
-p0
-- ~~Create card from word using LLM.~~
-- ~~Add card to an anki deck.~~
 
-p1
-- Shared/Live deck collaboration.
 
-### Change log
+This is inherently super insecure. You should consider adding firewall rules to the Digital Ocean droplet:
+Outbound:
+```
+Protocol	Port Range	Destination
+All TCP	All	All IPv4 / All IPv6
+All UDP	All	All IPv4 / All IPv6
+All ICMP	All	All IPv4 / All IPv6
+```
+Inbound:
+```
+All ICMP	All	All IPv4 / All IPv6
+```
 
-2024-01-12
-- added wrapper module for requests to AnkiConnect
-- added basic tests
+Create a snapshot of the droplet.
